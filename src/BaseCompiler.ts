@@ -227,28 +227,6 @@ export default class BaseCompiler {
         this.write("\n");
     }
 
-    wUnion(name: string, ast: Field[]) {
-        this.write("type", SPACE, name, SPACE, "=", SPACE);
-        ast.forEach((field, idx) => {
-            this.write("{");
-            this.increaseIntend();
-            this.wIntend();
-            this.write(this.getName(field));
-            if (field.option === "optional") {
-                this.write("?");
-            }
-            this.write(":", SPACE);
-            this.wValueType(field.type);
-            this.write(";");
-            this.decreaseIntend();
-            this.write("}");
-            if (idx < ast.length - 1) {
-                this.write(" | ");
-            }
-        });
-        this.write("\n\n");
-    }
-
     wException(name: string, ast: Field[]) {
         this.wIntend();
         this.write("type", SPACE, name, SPACE, "=", SPACE);
@@ -266,7 +244,14 @@ export default class BaseCompiler {
     writeUnions(unions: Unions) {
         Object.keys(unions).forEach((k: keyof typeof unions) => {
             const s = unions[k];
-            this.wExport(() => this.wUnion(String(k), s));
+            this.wExport(() =>
+                this.wClass(
+                    String(k),
+                    s.map(field =>
+                        Object.assign({}, field, { option: "optional" })
+                    )
+                )
+            );
         });
     }
 
