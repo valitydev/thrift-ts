@@ -133,7 +133,7 @@ export default (
     );
     if (options.json && options.pack) {
         const packFile = {
-            filename: "pack.json",
+            filename: "",
             content: JSON.stringify(
                 compiledFiles.map(file => ({
                     path: file.filename,

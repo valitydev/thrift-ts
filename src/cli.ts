@@ -157,8 +157,10 @@ export default () => {
                 })),
                 options
             );
-            if (!fs.existsSync(out)) {
-                fs.mkdirSync(out);
+            const parsedOutPath = path.parse(out);
+            const outPath = parsedOutPath.ext ? parsedOutPath.dir : out;
+            if (!fs.existsSync(outPath)) {
+                fs.mkdirSync(outPath);
             }
             compiledFiles.forEach(newFile => {
                 const outfile = path.join(out, newFile.filename);
