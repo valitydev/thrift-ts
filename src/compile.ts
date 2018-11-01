@@ -136,6 +136,7 @@ export default (
             filename: "pack.json",
             content: JSON.stringify(
                 compiledFiles.map(file => ({
+                    path: file.filename,
                     name: path.basename(file.filename, ".json"),
                     ast: JSON.parse(file.content)
                 }))
