@@ -41,7 +41,7 @@ class Compile extends BaseCompiler {
         }
     }
 
-    getName(): string {
+    getFileName(): string {
         return path.basename(this.filename, ".thrift");
     }
 
@@ -49,7 +49,7 @@ class Compile extends BaseCompiler {
         const content = JSON.stringify(this.ast);
         return [
             {
-                filename: `${this.getName()}.json`,
+                filename: `${this.getFileName()}.json`,
                 content: prettify
                     ? prettier.format(content, {
                           parser: "json"
@@ -91,7 +91,7 @@ class Compile extends BaseCompiler {
             });
         }
 
-        const filename = `${this.getName()}${
+        const filename = `${this.getFileName()}${
             this.definition ? "_types.d.ts" : ".ts"
         }`;
 
