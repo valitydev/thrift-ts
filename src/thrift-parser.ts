@@ -18,7 +18,7 @@ export type MapType = {
     valueType: ValueType;
 };
 
-export type ValueType = string | SetType | ListType | MapType;
+export type ValueType = string | ThriftType | SetType | ListType | MapType;
 
 export type ThriftType =
     | "int"
@@ -36,7 +36,7 @@ export type FieldOption = "required" | "optional";
 export type Field = {
     id?: string;
     option?: FieldOption;
-    type: ThriftType;
+    type: ValueType;
     name: string;
 };
 
