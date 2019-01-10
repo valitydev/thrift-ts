@@ -15,4 +15,7 @@ export type CompileOptions = {
     int64AsString?: boolean;
     definition?: boolean;
     camelCase?: boolean;
+    json?: boolean;
+    pack?: boolean;
+    prettify?: boolean;
 };

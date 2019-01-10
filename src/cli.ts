@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as glob from "glob";
 import * as path from "path";
 import * as yargs from "yargs";
-import * as prettier from "prettier";
 
 import compile from "./compile";
+import { CompileOptions } from "./types";
 
 export default () => {
     const argv = yargs
@@ -41,6 +41,24 @@ export default () => {
         .options("c", {
             alias: "camelCase",
             describe: "camel case",
+            default: false,
+            type: "boolean"
+        })
+        .options("j", {
+            alias: "json",
+            describe: "JSON",
+            default: false,
+            type: "boolean"
+        })
+        .options("p", {
+            alias: "prettify",
+            describe: "Prettify",
+            default: false,
+            type: "boolean"
+        })
+        .options("pk", {
+            alias: "pack",
+            describe: "One file",
             default: false,
             type: "boolean"
         })
@@ -122,34 +140,32 @@ export default () => {
                 basePath = getBasePath(files);
             }
             console.log("basePath:", basePath);
-            files.forEach(file => {
-                const files = compile(
-                    {
-                        filename: file,
-                        content: fs.readFileSync(file)
-                    },
-                    {
-                        tabSize: argv.tabSize,
-                        spaceAsTab: argv.spaceAsTab,
-                        int64AsString: argv.int64AsString,
-                        definition: argv.definition,
-                        camelCase: argv.camelCase
-                    }
-                );
-                if (!fs.existsSync(out)) {
-                    fs.mkdirSync(out);
-                }
-                files.forEach(newFile => {
-                    const outfile = path.join(out, newFile.filename);
-                    console.log("outfile:", outfile);
-                    fs.writeFileSync(
-                        outfile,
-                        prettier.format(
-                            "// tslint:disable\n" + newFile.content,
-                            { parser: "typescript" }
-                        )
-                    );
-                });
+            const options: CompileOptions = {
+                tabSize: argv.tabSize,
+                spaceAsTab: argv.spaceAsTab,
+                int64AsString: argv.int64AsString,
+                definition: argv.definition,
+                camelCase: argv.camelCase,
+                json: argv.json,
+                pack: argv.pack,
+                prettify: argv.prettify
+            };
+            const compiledFiles = compile(
+                files.map(file => ({
+                    filename: file,
+                    content: fs.readFileSync(file)
+                })),
+                options
+            );
+            const parsedOutPath = path.parse(out);
+            const outPath = parsedOutPath.ext ? parsedOutPath.dir : out;
+            if (!fs.existsSync(outPath)) {
+                fs.mkdirSync(outPath);
+            }
+            compiledFiles.forEach(newFile => {
+                const outfile = path.join(out, newFile.filename);
+                console.log("outfile:", outfile);
+                fs.writeFileSync(outfile, newFile.content);
             });
         });
     });
