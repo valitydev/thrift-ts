@@ -41,7 +41,7 @@ for (let i = 0; i < 256; i++) {
 //
 // Int64
 //
-export class Int64 {
+export default class Int64 {
     // Max integer value that JS can accurately represent
     static MAX_INT: number = Math.pow(2, 53);
 

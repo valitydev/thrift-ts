@@ -1,3 +1,3 @@
 export * from "./compile";
 export * from "./thrift-parser";
-export * from "./int64";
+export { default as Int64 } from "./int64";
