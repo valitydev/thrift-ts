@@ -127,8 +127,8 @@ export default () => {
 
     argv._.forEach(p => {
         let out: string;
-        if (argv.out) {
-            out = argv.out;
+        if (argv.o) {
+            out = argv.o;
         } else {
             out = "./";
         }
@@ -141,14 +141,14 @@ export default () => {
             }
             console.log("basePath:", basePath);
             const options: CompileOptions = {
-                tabSize: argv.tabSize,
-                spaceAsTab: argv.spaceAsTab,
-                int64AsString: argv.int64AsString,
-                definition: argv.definition,
-                camelCase: argv.camelCase,
-                json: argv.json,
-                pack: argv.pack,
-                prettify: argv.prettify
+                tabSize: argv.t,
+                spaceAsTab: argv.s,
+                int64AsString: argv.i,
+                definition: argv.d,
+                camelCase: argv.c,
+                json: argv.j,
+                pack: argv.pk,
+                prettify: argv.p
             };
             const compiledFiles = compile(
                 files.map(file => ({
