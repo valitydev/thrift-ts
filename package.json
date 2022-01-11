@@ -13,6 +13,10 @@
     "url": "https://github.com/windwhinny/thrift-ts.git",
     "type": "git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "author": "Eric Time",
   "license": "ISC",
   "devDependencies": {
