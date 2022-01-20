@@ -6,11 +6,10 @@
   "scripts": {
     "build": "tsc",
     "test": "tsc test/* --outDir test-tmp && mocha",
-    "prepare": "npm run build",
     "prettier": "prettier --write \"{,{src,test,bin}/**/}*.{ts,js,json}\""
   },
   "repository": {
-    "url": "https://github.com/windwhinny/thrift-ts.git",
+    "url": "https://github.com/valitydev/thrift-ts.git",
     "type": "git"
   },
   "author": "Eric Time",
