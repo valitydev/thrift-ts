@@ -409,7 +409,7 @@ export default class BaseCompiler {
     }
 
     writeCommonType() {
-        this.write(`\nimport Int64 from 'thrift-ts/lib/int64';\n\n`);
+        this.write(`\nimport Int64 from '@vality/thrift-ts/lib/int64';\n\n`);
     }
 
     wPromise(type: ValueType) {

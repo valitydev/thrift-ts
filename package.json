@@ -1,6 +1,6 @@
 {
-  "name": "thrift-ts",
-  "version": "2.0.0-alpha",
+  "name": "@vality/thrift-ts",
+  "version": "2.2.0-alpha",
   "description": "parse .thrift file to .d.ts",
   "main": "./lib/index.js",
   "scripts": {
@@ -11,6 +11,10 @@
   "repository": {
     "url": "https://github.com/valitydev/thrift-ts.git",
     "type": "git"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "author": "Eric Time",
   "license": "ISC",
@@ -32,7 +36,7 @@
     "typescript": "^3.1.5"
   },
   "bin": {
-    "thrift-ts": "bin/index.js"
+    "@vality/thrift-ts": "bin/index.js"
   },
   "dependencies": {
     "buffer": "^5.2.1",

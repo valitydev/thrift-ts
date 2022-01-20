@@ -296,3 +296,5 @@ export default class Int64 {
         );
     }
 }
+
+module.exports = Int64;
