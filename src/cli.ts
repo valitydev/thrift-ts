@@ -4,7 +4,7 @@ import * as path from "path";
 import * as yargs from "yargs";
 
 import compile from "./compile";
-import { CompileOptions } from "./types";
+import { CompileOptions, File } from "./types";
 
 export default () => {
     const argv = yargs
@@ -50,18 +50,6 @@ export default () => {
             default: false,
             type: "boolean"
         })
-        .options("p", {
-            alias: "prettify",
-            describe: "Prettify",
-            default: false,
-            type: "boolean"
-        })
-        .options("pk", {
-            alias: "pack",
-            describe: "One file",
-            default: false,
-            type: "boolean"
-        })
         .options("v", {
             alias: "version",
             describe: "current version"
@@ -81,29 +69,6 @@ export default () => {
         throw new Error("must specify a file");
     }
 
-    function getBasePath(files: any[]) {
-        let i = 0;
-        if (files.length <= 1) return "";
-        while (i < files[0].length) {
-            let char = "";
-            const equal = files.every((file: any[], index: number) => {
-                if (index === 0) {
-                    char = file[i];
-                    return true;
-                } else if (file[i] === char) {
-                    return true;
-                }
-                return false;
-            });
-            if (!equal) {
-                break;
-            }
-            i++;
-        }
-
-        return files[0].slice(0, i);
-    }
-
     /**
      * If you enter the folder directly, you need to switch to similar ./**\/*.thrift
      * @param {string} folder
@@ -120,53 +85,63 @@ export default () => {
         return folder;
     }
 
-    let basePath: string | null = null;
-    if (argv._.length > 1) {
-        basePath = getBasePath(argv._);
+    let out: string;
+    if (argv.o) {
+        out = argv.o;
+    } else {
+        out = "./";
+    }
+    const parsedOutPath = path.parse(out);
+    const outPath = parsedOutPath.ext ? parsedOutPath.dir : out;
+    if (!fs.existsSync(outPath)) {
+        try {
+            fs.mkdirSync(outPath);
+        } catch (err) {
+            console.warn(err);
+        }
     }
 
-    argv._.forEach(p => {
-        let out: string;
-        if (argv.o) {
-            out = argv.o;
-        } else {
-            out = "./";
-        }
-        // if you enter the folder path directly, you need to do the conversion
-        p = getFolderPath(p);
-        glob(p, (err, files) => {
-            if (err) throw err;
-            if (!basePath) {
-                basePath = getBasePath(files);
-            }
-            console.log("basePath:", basePath);
-            const options: CompileOptions = {
-                tabSize: argv.t,
-                spaceAsTab: argv.s,
-                int64AsString: argv.i,
-                definition: argv.d,
-                camelCase: argv.c,
-                json: argv.j,
-                pack: argv.pk,
-                prettify: argv.p
-            };
-            const compiledFiles = compile(
+    const compiledFiles: File[] = [];
+    for (const fileDirOrPath of argv._) {
+        const files = glob.sync(getFolderPath(fileDirOrPath));
+        console.log("Source:", fileDirOrPath);
+        const options: CompileOptions = {
+            tabSize: argv.t,
+            spaceAsTab: argv.s,
+            int64AsString: argv.i,
+            definition: argv.d,
+            camelCase: argv.c,
+            json: argv.j,
+            dirPath:
+                path.parse(fileDirOrPath).ext === ".thrift"
+                    ? path.join(fileDirOrPath, "..")
+                    : fileDirOrPath
+        };
+        compiledFiles.push(
+            ...compile(
                 files.map(file => ({
                     filename: file,
                     content: fs.readFileSync(file)
                 })),
                 options
-            );
-            const parsedOutPath = path.parse(out);
-            const outPath = parsedOutPath.ext ? parsedOutPath.dir : out;
-            if (!fs.existsSync(outPath)) {
-                fs.mkdirSync(outPath);
-            }
-            compiledFiles.forEach(newFile => {
-                const outfile = path.join(out, newFile.filename);
-                console.log("outfile:", outfile);
-                fs.writeFileSync(outfile, newFile.content);
-            });
+            )
+        );
+    }
+    if (argv.j) {
+        const filename = compiledFiles[0].filename;
+        const content = JSON.stringify(
+            compiledFiles.map(file => JSON.parse(file.content)).flat(),
+            null,
+            4
+        );
+        const outfile = path.join(out, filename);
+        console.log("Result:", outfile);
+        fs.writeFileSync(outfile, content);
+    } else {
+        compiledFiles.forEach(newFile => {
+            const outfile = path.join(out, newFile.filename);
+            console.log("Result:", outfile);
+            fs.writeFileSync(outfile, newFile.content);
         });
-    });
+    }
 };
