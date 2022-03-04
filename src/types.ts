@@ -16,6 +16,5 @@ export type CompileOptions = {
     definition?: boolean;
     camelCase?: boolean;
     json?: boolean;
-    pack?: boolean;
-    prettify?: boolean;
+    dirPath: string;
 };

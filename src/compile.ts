@@ -121,33 +121,32 @@ export const compile = (
 };
 
 export default (
-    sourceFile: Array<{
+    sourceFiles: Array<{
         filename: string;
         content: string | Buffer;
     }>,
     options: CompileOptions
 ): File[] => {
-    const compiledFiles = sourceFile.reduce(
-        (acc, file) => [...acc, ...compile(file, options)],
-        []
-    );
-    if (options.json && options.pack) {
+    const compiledFiles = sourceFiles
+        .map(sourceFile =>
+            compile(sourceFile, options).map(file => ({
+                file,
+                filePath: path.relative(options.dirPath, sourceFile.filename)
+            }))
+        )
+        .flat();
+    if (options.json) {
         const packFile = {
             filename: "",
             content: JSON.stringify(
-                compiledFiles.map(file => ({
-                    path: file.filename,
+                compiledFiles.map(({ file, filePath }) => ({
+                    path: filePath,
                     name: path.basename(file.filename, ".json"),
                     ast: JSON.parse(file.content)
                 }))
             )
         };
-        if (options.prettify) {
-            packFile.content = prettier.format(packFile.content, {
-                parser: "json"
-            });
-        }
         return [packFile];
     }
-    return compiledFiles;
+    return compiledFiles.map(({ file }) => file);
 };

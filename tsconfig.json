@@ -8,8 +8,8 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "sourceMap": false,
-        "target": "ES6",
-        "lib": ["es2015", "es2016", "es2017", "es2018", "scripthost"],
+        "target": "ES2015",
+        "lib": ["ES2021"],
         "experimentalDecorators": true,
         "outDir": "lib",
         "declaration": true
