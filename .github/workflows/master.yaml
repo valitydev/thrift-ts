@@ -17,14 +17,12 @@ jobs:
           node-version: '16.13.2'
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
-      - name: Conventional Changelog
-        uses: TriPSs/conventional-changelog-action@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Install Packages
         run: npm ci
       - name: Build
         run: npm run build
+      - name: Version Up
+        run: npm version prerelease --preid ${GITHUB_SHA::7} --no-git-tag-version
       - name: Publish NPM
         run: npm publish
         env:
