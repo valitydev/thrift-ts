@@ -1,29 +1,19 @@
-name: Master
+name: Publish
+
 on:
   push:
-    branches:
-      - 'master'
-      - 'main'
+    branches: ['master', 'main']
+
 jobs:
-  build:
-    name: Build
+  publish:
+    name: Publish
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Init NodeJS
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.13.2'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-      - name: Install Packages
-        run: npm ci
+      - uses: actions/checkout@v3
+      - uses: valitydev/action-frontend/setup@v0.1
+      - run: npm ci
       - name: Build
         run: npm run build
-      - name: Version Up
-        run: npm version prerelease --preid ${GITHUB_SHA::7} --no-git-tag-version
-      - name: Publish NPM
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: valitydev/action-frontend/publish@v0.1
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
