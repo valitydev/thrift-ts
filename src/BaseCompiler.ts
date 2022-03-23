@@ -472,6 +472,7 @@ export default class BaseCompiler {
     }
 
     wMethod(method: Method) {
+        // Callback
         // this.wIntend();
         // this.write(method.name);
         // this.wBrackets(() => {
