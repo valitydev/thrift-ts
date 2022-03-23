@@ -30,6 +30,7 @@ export default class BaseCompiler {
     buffer: string[] = [];
     filename: string;
     int64AsString: boolean = false;
+    int64AsNumber: boolean = false;
     camelCase: boolean = false;
     definition: boolean = true;
 
@@ -47,6 +48,10 @@ export default class BaseCompiler {
 
             if (typeof options.int64AsString !== "undefined") {
                 this.int64AsString = options.int64AsString;
+            }
+
+            if (typeof options.int64AsNumber !== "undefined") {
+                this.int64AsNumber = options.int64AsNumber;
             }
 
             if (typeof options.camelCase !== "undefined") {
@@ -91,6 +96,10 @@ export default class BaseCompiler {
             case "i8":
                 return "number";
             case "i64":
+                console.log("xxx", this.int64AsNumber);
+                if (this.int64AsNumber) {
+                    return "number";
+                }
                 return "Int64";
             case "string":
             case "binary":

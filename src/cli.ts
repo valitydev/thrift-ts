@@ -32,6 +32,12 @@ export default () => {
             default: false,
             type: "boolean"
         })
+        .options("num", {
+            alias: "int64AsNumber",
+            describe: "treat type int64 as type number",
+            default: false,
+            type: "boolean"
+        })
         .options("d", {
             alias: "definition",
             describe: "generate definition type",
@@ -109,6 +115,7 @@ export default () => {
             tabSize: argv.t,
             spaceAsTab: argv.s,
             int64AsString: argv.i,
+            int64AsNumber: argv.num,
             definition: argv.d,
             camelCase: argv.c,
             json: argv.j,
