@@ -20,7 +20,7 @@ class Compile extends BaseCompiler {
 
         this.filename = file.filename;
         this.ast = thriftPraser(file.content);
-        if (this.ast.service && this.definition) {
+        if (this.ast.service) {
             const services = this.ast.service;
             const basename = path.basename(this.filename, ".thrift");
             const include = Object.assign({}, this.ast.include, {

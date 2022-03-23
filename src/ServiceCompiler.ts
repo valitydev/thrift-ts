@@ -23,7 +23,9 @@ export default class ServiceCompiler extends BaseCompiler {
         this.wExport(() => this.wService(this.service, this.basename));
 
         return {
-            filename: `${path.basename(this.name, ".thrift")}.d.ts`,
+            filename: `${this.basename}-${path.basename(this.name, ".thrift")}${
+                this.definition ? ".d" : ""
+            }.ts`,
             content: this.buffer.join("")
         };
     }

@@ -96,7 +96,6 @@ export default class BaseCompiler {
             case "i8":
                 return "number";
             case "i64":
-                console.log("xxx", this.int64AsNumber);
                 if (this.int64AsNumber) {
                     return "number";
                 }
@@ -473,18 +472,18 @@ export default class BaseCompiler {
     }
 
     wMethod(method: Method) {
-        this.wIntend();
-        this.write(method.name);
-        this.wBrackets(() => {
-            const args = method.args;
-            this.wMethodArgs(args, {
-                returnType: method.type,
-                expections: method.throws
-            });
-        });
-        this.write(":", SPACE, "void");
-        this.write(";");
-        this.write("\n");
+        // this.wIntend();
+        // this.write(method.name);
+        // this.wBrackets(() => {
+        //     const args = method.args;
+        //     this.wMethodArgs(args, {
+        //         returnType: method.type,
+        //         expections: method.throws
+        //     });
+        // });
+        // this.write(":", SPACE, "void");
+        // this.write(";");
+        // this.write("\n");
 
         this.wIntend();
         this.write(method.name);
@@ -529,7 +528,7 @@ export default class BaseCompiler {
 
     wService(service: Service, basename: string) {
         this.wIntend();
-        this.write("class", SPACE, "Client", SPACE);
+        this.write("interface", SPACE, "Client", SPACE);
         this.wBlock(false, () => {
             this.increaseIntend();
             Object.values(service.functions).forEach((method, index, array) => {
