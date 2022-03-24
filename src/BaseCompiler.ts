@@ -527,7 +527,7 @@ export default class BaseCompiler {
         return argLike;
     }
 
-    wService(service: Service, basename: string) {
+    wService(service: Service, basename: string, serviceName: string) {
         this.wIntend();
         this.write("interface", SPACE, "Client", SPACE);
         this.wBlock(false, () => {
@@ -545,5 +545,14 @@ export default class BaseCompiler {
             });
             this.decreaseIntend(false);
         });
+        this.write(
+            `export const config = {
+                functions: [${Object.keys(service.functions)
+                    .map(k => `'${k}'`)
+                    .join(",")}],
+                name: '${basename}',
+                serviceName: '${serviceName}'
+            }`
+        );
     }
 }
