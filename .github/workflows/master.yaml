@@ -16,4 +16,4 @@ jobs:
               run: npm run build
             - uses: valitydev/action-frontend/publish@v0.1
               with:
-                  npm-token: ${{ secrets.NPM_TOKEN   }}
+                  npm-token: ${{ secrets.NPM_TOKEN }}
