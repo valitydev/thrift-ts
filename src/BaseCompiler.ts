@@ -529,7 +529,7 @@ export default class BaseCompiler {
 
     wService(service: Service, basename: string, serviceName: string) {
         this.wIntend();
-        this.write("interface", SPACE, "Client", SPACE);
+        this.write("interface", SPACE, "CodegenClient", SPACE);
         this.wBlock(false, () => {
             this.increaseIntend();
             Object.values(service.functions).forEach((method, index, array) => {
@@ -546,7 +546,7 @@ export default class BaseCompiler {
             this.decreaseIntend(false);
         });
         this.write(
-            `export const config = {
+            `export const codegenClientConfig = {
                 functions: [${Object.keys(service.functions)
                     .map(k => `'${k}'`)
                     .join(",")}],
