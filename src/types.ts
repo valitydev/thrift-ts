@@ -13,6 +13,7 @@ export type CompileOptions = {
     tabSize?: number;
     spaceAsTab?: boolean;
     int64AsString?: boolean;
+    int64AsNumber?: boolean;
     definition?: boolean;
     camelCase?: boolean;
     json?: boolean;

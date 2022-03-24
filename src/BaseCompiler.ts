@@ -30,6 +30,7 @@ export default class BaseCompiler {
     buffer: string[] = [];
     filename: string;
     int64AsString: boolean = false;
+    int64AsNumber: boolean = false;
     camelCase: boolean = false;
     definition: boolean = true;
 
@@ -47,6 +48,10 @@ export default class BaseCompiler {
 
             if (typeof options.int64AsString !== "undefined") {
                 this.int64AsString = options.int64AsString;
+            }
+
+            if (typeof options.int64AsNumber !== "undefined") {
+                this.int64AsNumber = options.int64AsNumber;
             }
 
             if (typeof options.camelCase !== "undefined") {
@@ -91,6 +96,9 @@ export default class BaseCompiler {
             case "i8":
                 return "number";
             case "i64":
+                if (this.int64AsNumber) {
+                    return "number";
+                }
                 return "Int64";
             case "string":
             case "binary":
@@ -464,18 +472,19 @@ export default class BaseCompiler {
     }
 
     wMethod(method: Method) {
-        this.wIntend();
-        this.write(method.name);
-        this.wBrackets(() => {
-            const args = method.args;
-            this.wMethodArgs(args, {
-                returnType: method.type,
-                expections: method.throws
-            });
-        });
-        this.write(":", SPACE, "void");
-        this.write(";");
-        this.write("\n");
+        // Callback
+        // this.wIntend();
+        // this.write(method.name);
+        // this.wBrackets(() => {
+        //     const args = method.args;
+        //     this.wMethodArgs(args, {
+        //         returnType: method.type,
+        //         expections: method.throws
+        //     });
+        // });
+        // this.write(":", SPACE, "void");
+        // this.write(";");
+        // this.write("\n");
 
         this.wIntend();
         this.write(method.name);
@@ -518,9 +527,9 @@ export default class BaseCompiler {
         return argLike;
     }
 
-    wService(service: Service, basename: string) {
+    wService(service: Service, basename: string, serviceName: string) {
         this.wIntend();
-        this.write("class", SPACE, "Client", SPACE);
+        this.write("interface", SPACE, "Client", SPACE);
         this.wBlock(false, () => {
             this.increaseIntend();
             Object.values(service.functions).forEach((method, index, array) => {
@@ -536,5 +545,14 @@ export default class BaseCompiler {
             });
             this.decreaseIntend(false);
         });
+        this.write(
+            `export const config = {
+                functions: [${Object.keys(service.functions)
+                    .map(k => `'${k}'`)
+                    .join(",")}],
+                name: '${basename}',
+                serviceName: '${serviceName}'
+            }`
+        );
     }
 }

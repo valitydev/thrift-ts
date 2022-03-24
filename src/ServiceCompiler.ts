@@ -20,10 +20,14 @@ export default class ServiceCompiler extends BaseCompiler {
         }
         this.writeCallbackTypeDeclare();
         this.writeCommonType();
-        this.wExport(() => this.wService(this.service, this.basename));
+        this.wExport(() =>
+            this.wService(this.service, this.basename, this.name)
+        );
 
         return {
-            filename: `${path.basename(this.name, ".thrift")}.d.ts`,
+            filename: `${this.basename}-${path.basename(this.name, ".thrift")}${
+                this.definition ? ".d" : ""
+            }.ts`,
             content: this.buffer.join("")
         };
     }
