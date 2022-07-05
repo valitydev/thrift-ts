@@ -91,12 +91,7 @@ export default () => {
         return folder;
     }
 
-    let out: string;
-    if (argv.o) {
-        out = argv.o;
-    } else {
-        out = "./";
-    }
+    const out: string = argv.o ?? "./";
     const parsedOutPath = path.parse(out);
     const outPath = parsedOutPath.ext ? parsedOutPath.dir : out;
     if (!fs.existsSync(outPath)) {
@@ -107,7 +102,7 @@ export default () => {
         }
     }
 
-    const compiledFiles: File[] = [];
+    let compiledFiles: File[] = [];
     for (const fileDirOrPath of argv._) {
         const files = glob.sync(getFolderPath(fileDirOrPath));
         console.log("Source:", fileDirOrPath);
@@ -135,20 +130,20 @@ export default () => {
         );
     }
     if (argv.j) {
-        const filename = compiledFiles[0].filename;
-        const content = JSON.stringify(
-            compiledFiles.map(file => JSON.parse(file.content)).flat(),
-            null,
-            4
-        );
-        const outfile = path.join(out, filename);
-        console.log("Result:", outfile);
-        fs.writeFileSync(outfile, content);
-    } else {
-        compiledFiles.forEach(newFile => {
-            const outfile = path.join(out, newFile.filename);
-            console.log("Result:", outfile);
-            fs.writeFileSync(outfile, newFile.content);
-        });
+        compiledFiles = [
+            {
+                ...compiledFiles[0],
+                content: JSON.stringify(
+                    compiledFiles.map(file => JSON.parse(file.content)).flat(),
+                    null,
+                    4
+                )
+            }
+        ];
     }
+    compiledFiles.forEach(newFile => {
+        const outfile = path.join(out, newFile.filename);
+        console.log("Result:", outfile);
+        fs.writeFileSync(outfile, newFile.content);
+    });
 };
