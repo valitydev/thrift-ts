@@ -9,16 +9,14 @@ export default class ServiceCompiler extends BaseCompiler {
         public name: string,
         public service: Service,
         public includes: Includes,
-        options: CompileOptions
+        options: CompileOptions,
+        private filePath: string
     ) {
         super(options);
     }
 
     getFileName(): string {
-        const { dir, name } = path.parse(
-            path.relative(this.options.dirPath, this.basename)
-        );
-        return `${path.join(dir, name)}-${path.basename(this.name, ".thrift")}`;
+        return `${this.filePath}-${path.basename(this.name, ".thrift")}`;
     }
 
     flush(): File {

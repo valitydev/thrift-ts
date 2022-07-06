@@ -35,7 +35,8 @@ class Compile extends BaseCompiler {
                     String(k),
                     services[k],
                     include,
-                    options
+                    options,
+                    this.getFileName()
                 );
             });
         }
@@ -98,8 +99,9 @@ class Compile extends BaseCompiler {
             this.definition ? "_types.d.ts" : ".ts"
         }`;
 
+        // TODO: ts-nocheck temporary solution for building projects with importing dependencies from the wrong protocol (may happen when merging protocols)
         const content = prettier.format(
-            "// tslint:disable\n" + this.buffer.join(""),
+            "// @ts-nocheck\n" + "// tslint:disable\n" + this.buffer.join(""),
             { parser: "typescript" }
         );
 

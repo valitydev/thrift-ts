@@ -103,7 +103,9 @@ export default () => {
     }
 
     let compiledFiles: File[] = [];
-    for (const fileDirOrPath of argv._) {
+    // argv._.reverse() affects the protocol merge order
+    // the first one on the list is more important
+    for (const fileDirOrPath of argv._.reverse()) {
         const files = glob.sync(getFolderPath(fileDirOrPath));
         console.log("Source:", fileDirOrPath);
         const options: CompileOptions = {
