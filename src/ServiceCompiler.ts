@@ -8,10 +8,17 @@ export default class ServiceCompiler extends BaseCompiler {
         public basename: string,
         public name: string,
         public service: Service,
-        public includes?: Includes,
-        options?: CompileOptions
+        public includes: Includes,
+        options: CompileOptions
     ) {
         super(options);
+    }
+
+    getFileName(): string {
+        const { dir, name } = path.parse(
+            path.relative(this.options.dirPath, this.basename)
+        );
+        return `${path.join(dir, name)}-${path.basename(this.name, ".thrift")}`;
     }
 
     flush(): File {
@@ -25,9 +32,7 @@ export default class ServiceCompiler extends BaseCompiler {
         );
 
         return {
-            filename: `${this.basename}-${path.basename(this.name, ".thrift")}${
-                this.definition ? ".d" : ""
-            }.ts`,
+            filename: `${this.getFileName()}${this.definition ? ".d" : ""}.ts`,
             content: this.buffer.join("")
         };
     }

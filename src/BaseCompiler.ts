@@ -34,7 +34,7 @@ export default class BaseCompiler {
     camelCase: boolean = false;
     definition: boolean = true;
 
-    constructor(options?: CompileOptions) {
+    constructor(protected options: CompileOptions) {
         if (options) {
             if (typeof options.tabSize !== "undefined") {
                 this.tabSize = options.tabSize;
@@ -274,7 +274,7 @@ export default class BaseCompiler {
         const getIncludePath = (path: string): string => {
             return (
                 "./" +
-                path.replace(/.*\//, "").replace(/.thrift$/, "") +
+                path.replace(/.thrift$/, "") +
                 (this.definition ? "_types" : "")
             );
         };

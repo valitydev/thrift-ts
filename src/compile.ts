@@ -14,7 +14,7 @@ class Compile extends BaseCompiler {
             filename: string;
             content: string | Buffer;
         },
-        options?: CompileOptions
+        options: CompileOptions
     ) {
         super(options);
 
@@ -42,7 +42,10 @@ class Compile extends BaseCompiler {
     }
 
     getFileName(): string {
-        return path.basename(this.filename, ".thrift");
+        const { dir, name } = path.parse(
+            path.relative(this.options.dirPath, this.filename)
+        );
+        return path.join(dir, name);
     }
 
     flushJSON(prettify: boolean = false): File[] {

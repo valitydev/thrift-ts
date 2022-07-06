@@ -144,6 +144,7 @@ export default () => {
     compiledFiles.forEach(newFile => {
         const outfile = path.join(out, newFile.filename);
         console.log("Result:", outfile);
+        fs.mkdirSync(path.parse(outfile).dir, { recursive: true });
         fs.writeFileSync(outfile, newFile.content);
     });
 };
