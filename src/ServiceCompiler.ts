@@ -21,7 +21,7 @@ export default class ServiceCompiler extends BaseCompiler {
 
     flush(): File {
         if (this.includes) {
-            this.writeInclude(this.includes);
+            this.writeInclude(this.includes, true);
         }
         this.writeCallbackTypeDeclare();
         this.writeCommonType();
