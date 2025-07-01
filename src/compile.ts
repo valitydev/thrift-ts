@@ -66,7 +66,7 @@ class Compile extends BaseCompiler {
     flush(): File[] {
         this.writeCommonType();
         if (this.ast.include) {
-            this.writeInclude(this.ast.include);
+            this.writeInclude(this.ast.include, true);
         }
         if (this.ast.const) {
             this.writeConst(this.ast.const);

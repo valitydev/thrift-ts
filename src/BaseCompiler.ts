@@ -297,17 +297,7 @@ export default class BaseCompiler {
                 `';\n`
             );
             if (reexport) {
-                this.write(
-                    "export",
-                    SPACE,
-                    "*",
-                    SPACE,
-                    "from",
-                    SPACE,
-                    `'`,
-                    getIncludePath(include.path),
-                    `';\n`
-                );
+                this.write("export", SPACE, `{ ${String(k)} }`, SPACE, `;\n`);
             }
         });
     }
