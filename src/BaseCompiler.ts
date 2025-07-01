@@ -270,7 +270,7 @@ export default class BaseCompiler {
         });
     }
 
-    writeInclude(includes: Includes) {
+    writeInclude(includes: Includes, reexport = false) {
         const getIncludePath = (path: string): string => {
             return (
                 "./" +
@@ -296,6 +296,9 @@ export default class BaseCompiler {
                 getIncludePath(include.path),
                 `';\n`
             );
+            if (reexport) {
+                this.write("export", SPACE, `{ ${String(k)} }`, SPACE, `;\n`);
+            }
         });
     }
 
