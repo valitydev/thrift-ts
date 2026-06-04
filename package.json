@@ -9,7 +9,7 @@
     "prettier": "prettier --write \"{,{src,test,bin}/**/}*.{ts,js,json}\""
   },
   "repository": {
-    "url": "https://github.com/valitydev/thrift-ts.git",
+    "url": "git+https://github.com/valitydev/thrift-ts.git",
     "type": "git"
   },
   "publishConfig": {
