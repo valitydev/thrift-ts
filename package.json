@@ -1,6 +1,6 @@
 {
   "name": "@vality/thrift-ts",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "parse .thrift file to .d.ts",
   "main": "./lib/index.js",
   "scripts": {
