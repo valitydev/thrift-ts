@@ -2,14 +2,13 @@ name: PR
 
 on:
     pull_request:
-        branches: ["*"]
 
 jobs:
     check:
         name: Check
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - uses: valitydev/action-frontend/setup-install@v2
+            - uses: actions/checkout@v6
+            - uses: valitydev/action-frontend/setup-install@v3
             - name: Check
               run: npm run build

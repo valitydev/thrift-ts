@@ -1,6 +1,6 @@
 {
   "name": "@vality/thrift-ts",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "parse .thrift file to .d.ts",
   "main": "./lib/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "prettier": "prettier --write \"{,{src,test,bin}/**/}*.{ts,js,json}\""
   },
   "repository": {
-    "url": "https://github.com/valitydev/thrift-ts.git",
+    "url": "git+https://github.com/valitydev/thrift-ts.git",
     "type": "git"
   },
   "publishConfig": {
